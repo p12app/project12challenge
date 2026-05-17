@@ -373,10 +373,26 @@
     outline: none;
     resize: none;
     -webkit-appearance: none;
-    min-height: 40px;
+    min-height: 200px;
   }
 
   .memory-input::placeholder { color: var(--light-gray); }
+
+  .memory-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #c8c3be;
+    background: transparent;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--black);
+    padding: 4px 0;
+    outline: none;
+    resize: none;
+    -webkit-appearance: none;
+    min-height: 200px;
+  }
+  .memory-input::placeholder { color: #c0bbb6; }
 
   /* ── LOCK BUTTON ── */
   .lock-wrap {
@@ -769,7 +785,7 @@
       <div class="habit-info">
         <span class="habit-emoji">💼</span>
         <div class="habit-name">Side-Hustle or Skill Work</div>
-        <div class="habit-note">Build your future today</div>
+        <div class="habit-note">60-90 min daily, in pockets if needed</div>
       </div>
     </div>
 
@@ -825,6 +841,17 @@
       </div>
     </div>
 
+    <!-- WEIGH IN -->
+    <div class="gratitude-card" style="margin-top:8px">
+      <div class="gratitude-label">Today's Weigh In</div>
+      <div class="gratitude-inputs">
+        <div class="gratitude-row">
+          
+          <input class="gratitude-input" id="w0" type="text" oninput="autoSave()" placeholder="Enter weight..." autocomplete="off">
+        </div>
+      </div>
+    </div>
+
     <!-- FOOD LOG -->
     <div class="gratitude-card" style="margin-top:8px">
       <div class="gratitude-label">What I Ate Today</div>
@@ -846,7 +873,15 @@
           <input class="gratitude-input" id="f3" type="text" oninput="autoSave()" placeholder="Snack..." autocomplete="off">
         </div>
       </div>
-    </div><!-- end habits-container -->
+    </div>
+
+    <!-- MEMORY -->
+    <div style="background:var(--white);border-radius:16px;padding:20px 18px;margin-top:10px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <div style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:var(--black);text-transform:uppercase;margin-bottom:14px;">What I Want to Remember About Today</div>
+      <textarea class="memory-input" id="memory-note" oninput="autoSave()" placeholder="Write your thoughts here..." rows="10"></textarea>
+    </div>
+
+  </div><!-- end habits-container -->
 
   <!-- LOCK -->
   <div class="lock-wrap">
@@ -982,7 +1017,7 @@ function startChallenge() {
 }
 
 function emptyDay() {
-  return { habits: [false,false,false,false,false,false,false,false,false], food: ['','','',''], locked: false, won: false };
+  return { habits: [false,false,false,false,false,false,false,false,false], food: ['','','',''], weight: '', note: '', locked: false, won: false };
 }
 
 function renderDay(data) {
@@ -1013,6 +1048,10 @@ function renderDay(data) {
     var el = document.getElementById(id);
     if (el) el.value = (dayData.food && dayData.food[i]) || '';
   });
+  var w0 = document.getElementById('w0');
+  if (w0) w0.value = dayData.weight || '';
+  var mem = document.getElementById('memory-note');
+  if (mem) mem.value = dayData.note || '';
   var mem = document.getElementById('memory-note');
   if (mem) mem.value = dayData.note || '';
 
@@ -1039,7 +1078,7 @@ function disableInputs(disabled) {
   document.querySelectorAll('.habit-card').forEach(function(c) {
     c.style.pointerEvents = disabled ? 'none' : '';
   });
-  document.querySelectorAll('#f0, #f1, #f2, #f3').forEach(function(inp) {
+  document.querySelectorAll('#f0, #f1, #f2, #f3, #w0, #memory-note').forEach(function(inp) {
     inp.disabled = disabled;
   });
 }
@@ -1178,7 +1217,11 @@ function openDayModal(key) {
 
     var noteHtml = '';
 
-    body.innerHTML = habitsHtml + foodHtml;
+    var weightHtml = '';
+    if (day.weight) weightHtml = '<br><strong>Weigh In</strong><br>' + day.weight + ' lbs<br>';
+    var noteHtml = '';
+    if (day.note) noteHtml = '<br><strong>Remember</strong><br>' + day.note + '<br>';
+    body.innerHTML = habitsHtml + weightHtml + foodHtml + noteHtml;
   }
 
   document.getElementById('day-modal').classList.add('open');
@@ -1215,6 +1258,10 @@ function autoSave() {
       document.getElementById('f2').value,
       document.getElementById('f3').value
     ];
+    var w = document.getElementById('w0');
+    if (w) data.days[today].weight = w.value;
+    var mn = document.getElementById('memory-note');
+    if (mn) data.days[today].note = mn.value;
     saveData(data);
   } catch(e) { console.error(e); }
 }
