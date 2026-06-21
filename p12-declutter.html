@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="P12 Declutter">
+<meta name="theme-color" content="#f5f0eb">
+<title>P12 Declutter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0eb;
+    --white: #ffffff;
+    --black: #1a1a1a;
+    --gray: #8a8a8a;
+    --light-gray: #e8e3de;
+    --check-bg: #e0dbd5;
+    --accent: #c8a97e;
+    --card-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Mono', monospace;
+    color: var(--black);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    overscroll-behavior: none;
+  }
+
+  /* ── HOME SCREEN ── */
+  #home-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 48px 32px;
+    text-align: center;
+  }
+  #home-screen.active { display: flex; }
+
+  .home-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    line-height: 1.05;
+    color: var(--black);
+    margin-bottom: 8px;
+  }
+  .home-title em { font-style: italic; color: var(--accent); }
+
+  .home-subtitle {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--gray);
+    margin-bottom: 12px;
+  }
+
+  .home-pillars {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 56px;
+  }
+
+  .home-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--light-gray);
+    margin: 0 auto 56px;
+  }
+
+  .btn-start {
+    width: 100%;
+    max-width: 280px;
+    padding: 18px 0;
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-start:active { opacity: 0.75; }
+
+  /* ── MAIN SCREEN ── */
+  #main-screen {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  #main-screen.active { display: flex; }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 56px 24px 20px;
+    background: var(--cream);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    line-height: 1.05;
+    color: var(--black);
+  }
+  .header-title em { font-style: italic; color: var(--accent); }
+
+  .days-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .days-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .days-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  .header-date {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── PROGRESS CARDS ── */
+  .progress-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .progress-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .progress-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--black);
+  }
+
+  .progress-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    margin-top: 16px;
+  }
+
+  .progress-bar-bg {
+    height: 6px;
+    background: var(--light-gray);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-bar-label {
+    font-size: 10px;
+    color: var(--gray);
+    letter-spacing: 0.06em;
+    margin-top: 6px;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: var(--light-gray);
+    margin: 16px 0 0;
+  }
+
+  /* ── LOG SECTION ── */
+  .log-container {
+    flex: 1;
+    padding: 20px 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* ── LOG CARD ── */
+  .log-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 10px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .log-card-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .log-input-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .log-count-input {
+    width: 80px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--black);
+    background: var(--cream);
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    outline: none;
+    text-align: center;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+  }
+
+  .log-desc-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid #c8c3be;
+    background: transparent;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--black);
+    padding: 4px 0;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .log-desc-input::placeholder { color: #c0bbb6; }
+
+  .btn-log {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px 0;
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-log:active { opacity: 0.75; }
+
+  /* ── HISTORY ── */
+  .history-card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 10px;
+  }
+
+  .history-item {
+    display: flex;
+    align-items: center;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--cream);
+    gap: 12px;
+  }
+  .history-item:last-child { border-bottom: none; }
+
+  .history-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .history-info { flex: 1; }
+
+  .history-count {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--black);
+    line-height: 1;
+  }
+
+  .history-desc {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  .history-date {
+    font-size: 10px;
+    color: var(--gray);
+    letter-spacing: 0.04em;
+    text-align: right;
+  }
+
+  .history-del {
+    background: none;
+    border: none;
+    color: var(--light-gray);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .history-del:active { color: var(--gray); }
+
+  /* ── RESET ── */
+  .reset-wrap {
+    padding: 0 24px 8px;
+  }
+
+  .btn-reset {
+    width: 100%;
+    padding: 14px 0;
+    background: transparent;
+    border: 1px solid var(--light-gray);
+    border-radius: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .btn-reset:active { background: var(--light-gray); }
+
+  /* ── HOW TO USE ── */
+  .how-btn {
+    width: calc(100% - 48px);
+    margin: 0 24px 16px;
+    padding: 16px 0;
+    background: transparent;
+    border: 1px solid var(--light-gray);
+    border-radius: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .how-btn:active { background: var(--light-gray); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    align-items: flex-end;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal-sheet {
+    background: var(--white);
+    border-radius: 24px 24px 0 0;
+    padding: 32px 24px 48px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-handle {
+    width: 36px;
+    height: 4px;
+    background: var(--light-gray);
+    border-radius: 2px;
+    margin: 0 auto 24px;
+  }
+
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    margin-bottom: 16px;
+  }
+
+  .modal-body {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.8;
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  .modal-close {
+    width: 100%;
+    padding: 16px 0;
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+
+  /* ── COMPLETE BANNER ── */
+  .complete-banner {
+    background: var(--accent);
+    color: var(--white);
+    text-align: center;
+    padding: 10px 24px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: none;
+  }
+
+  .footer-link {
+    text-align: center;
+    padding-bottom: 32px;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .footer-link a {
+    color: var(--gray);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HOME SCREEN ══ -->
+<div id="home-screen" class="active">
+  <img src="project-3.png" alt="Project 12" style="width:80px;height:80px;margin-bottom:20px;opacity:0.85;">
+  <div class="home-title">PROJECT <em>12</em><br><span style="font-size:0.7em;letter-spacing:0.02em;">Declutter Challenge</span></div>
+  <div class="home-subtitle">465 Items in 30 Days</div>
+  <div class="home-pillars">Clear the clutter. Own your space.</div>
+  <div class="home-divider"></div>
+  <button class="btn-start" onclick="startChallenge()">Start the Challenge</button>
+  <div style="text-align:center;font-size:9px;letter-spacing:0.14em;color:var(--gray);text-transform:uppercase;margin-top:32px;">
+    <a href="https://project12challenge.com" target="_blank" style="color:var(--gray);text-decoration:none;">project12challenge.com</a>
+  </div>
+</div>
+
+<!-- ══ MAIN SCREEN ══ -->
+<div id="main-screen">
+
+  <div id="complete-banner" class="complete-banner">Challenge Complete — 465 Items Gone!</div>
+
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="header-title">PROJECT <em>12</em><br><span style="font-size:0.8em;">Declutter Challenge</span></div>
+        <div class="header-date" id="header-date"></div>
+      </div>
+      <div class="days-badge">
+        <div class="days-num" id="days-num">0</div>
+        <div class="days-label">Days In</div>
+      </div>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-card">
+        <div class="progress-num" id="total-removed">0</div>
+        <div class="progress-label">Items Removed</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-num" id="items-left">465</div>
+        <div class="progress-label">Items to Go</div>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-bar-label" id="progress-label">0 of 465 items cleared</div>
+    </div>
+
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="log-container">
+    <div class="section-label">Log Items</div>
+
+    <div class="log-card">
+      <div class="log-card-label">How many items did you remove today?</div>
+      <div class="log-input-row">
+        <input class="log-count-input" id="log-count" type="number" min="1" max="465" placeholder="0" inputmode="numeric">
+        <input class="log-desc-input" id="log-desc" type="text" placeholder="Optional notes..." autocomplete="off">
+      </div>
+      <button class="btn-log" onclick="logItems()">Add to My Total</button>
+    </div>
+
+    <div class="section-label" style="margin-top:8px;">What I've Removed</div>
+    <div id="history-list">
+      <div style="text-align:center;padding:24px;font-size:12px;color:var(--gray);">Nothing logged yet. Start removing!</div>
+    </div>
+
+  </div>
+
+  <div class="reset-wrap">
+    <button class="btn-reset" onclick="resetChallenge()">Reset Challenge</button>
+  </div>
+
+  <button class="how-btn" onclick="openHow()">How to Use This App</button>
+
+  <div class="footer-link">
+    <a href="https://project12challenge.com" target="_blank">project12challenge.com</a>
+  </div>
+
+</div>
+
+<!-- ══ HOW TO USE MODAL ══ -->
+<div class="modal-overlay" id="how-modal" onclick="closeHow(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">How to Use This App</div>
+    <div class="modal-body">
+      <strong>What is this?</strong><br>
+      The Project 12 Declutter Challenge. Your goal is to remove 465 items from your home in 30 days. Trash them, donate them, or sell them — they just have to leave.<br><br>
+
+      <strong>How to log items</strong><br>
+      Enter the number of items you removed and a short description of what they were. Tap Add to My Total. Your running count updates automatically.<br><br>
+
+      <strong>What counts?</strong><br>
+      Anything that leaves your home. Clothes, books, kitchen items, decor, paperwork, toiletries, old electronics — if it's gone, it counts.<br><br>
+
+      <strong>What doesn't count?</strong><br>
+      Everyday trash you would have thrown out anyway. The goal is to clear out things that have been sitting and taking up space.<br><br>
+
+      <strong>Save to your home screen</strong><br>
+      iPhone: Open this link in Safari. Tap the Share button at the bottom. Tap Add to Home Screen. Toggle Open as Web App to on. Tap Add.<br><br>
+      Android: Open this link in Chrome. Tap the three dots in the top right and tap Add to Home Screen. Tap Add.
+    </div>
+    <button class="modal-close" onclick="closeHow()">Done</button>
+  </div>
+</div>
+
+<script>
+const SK = 'p12_declutter_v1';
+const GOAL = 465;
+const GOAL_DAYS = 30;
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(SK)) || null; } catch { return null; }
+}
+
+function save(data) {
+  try { localStorage.setItem(SK, JSON.stringify(data)); } catch(e) {}
+}
+
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function formatDate(str) {
+  const parts = str.split('-').map(Number);
+  const date = new Date(parts[0], parts[1]-1, parts[2]);
+  return date.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+}
+
+function getDaysIn(data) {
+  const start = new Date(data.startDate + 'T00:00:00');
+  const now = new Date(todayStr() + 'T00:00:00');
+  return Math.min(Math.floor((now - start) / (1000*60*60*24)) + 1, GOAL_DAYS);
+}
+
+function getTotal(data) {
+  return (data.log || []).reduce(function(s, e) { return s + e.count; }, 0);
+}
+
+function startChallenge() {
+  const data = { startDate: todayStr(), log: [] };
+  save(data);
+  renderMain(data);
+  showMain();
+}
+
+function showHome() {
+  document.getElementById('home-screen').style.display = 'flex';
+  document.getElementById('main-screen').style.display = 'none';
+}
+
+function showMain() {
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('main-screen').style.display = 'flex';
+}
+
+function renderMain(data) {
+  const total = getTotal(data);
+  const left = Math.max(0, GOAL - total);
+  const pct = Math.min(100, Math.round((total / GOAL) * 100));
+  const daysIn = getDaysIn(data);
+
+  document.getElementById('header-date').textContent = formatDate(todayStr());
+  document.getElementById('days-num').textContent = daysIn;
+  document.getElementById('total-removed').textContent = total;
+  document.getElementById('items-left').textContent = left;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = total + ' of ' + GOAL + ' items cleared';
+
+  const banner = document.getElementById('complete-banner');
+  banner.style.display = total >= GOAL ? 'block' : 'none';
+
+  renderHistory(data);
+}
+
+function renderHistory(data) {
+  const list = document.getElementById('history-list');
+  if (!data.log || !data.log.length) {
+    list.innerHTML = '<div style="text-align:center;padding:24px;font-size:12px;color:var(--gray);">Nothing logged yet. Start removing!</div>';
+    return;
+  }
+
+  const reversed = [...data.log].reverse();
+  const card = document.createElement('div');
+  card.className = 'history-card';
+
+  reversed.forEach(function(entry) {
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerHTML =
+      '<div class="history-dot"></div>' +
+      '<div class="history-info">' +
+        '<div class="history-count">' + entry.count + ' item' + (entry.count !== 1 ? 's' : '') + '</div>' +
+        (entry.desc ? '<div class="history-desc">' + entry.desc + '</div>' : '') +
+      '</div>' +
+      '<div class="history-date">' + formatDate(entry.date) + '</div>' +
+      '<button class="history-del" onclick="deleteEntry(\'' + entry.id + '\')">×</button>';
+    card.appendChild(item);
+  });
+
+  list.innerHTML = '';
+  list.appendChild(card);
+}
+
+function logItems() {
+  const countEl = document.getElementById('log-count');
+  const descEl = document.getElementById('log-desc');
+  const count = parseInt(countEl.value);
+
+  if (!count || count < 1) {
+    countEl.focus();
+    return;
+  }
+
+  const data = load();
+  if (!data) return;
+
+  const entry = {
+    id: Date.now() + '_' + Math.random().toString(36).slice(2),
+    date: todayStr(),
+    count: count,
+    desc: descEl.value.trim()
+  };
+
+  data.log.push(entry);
+  save(data);
+
+  countEl.value = '';
+  descEl.value = '';
+  renderMain(data);
+}
+
+function deleteEntry(id) {
+  const data = load();
+  if (!data) return;
+  data.log = data.log.filter(function(e) { return e.id !== id; });
+  save(data);
+  renderMain(data);
+}
+
+function resetChallenge() {
+  if (!confirm('Reset your challenge? All your progress will be lost.')) return;
+  localStorage.removeItem(SK);
+  showHome();
+}
+
+function openHow() {
+  document.getElementById('how-modal').classList.add('open');
+}
+
+function closeHow(e) {
+  if (!e || e.target === document.getElementById('how-modal')) {
+    document.getElementById('how-modal').classList.remove('open');
+  }
+}
+
+// ── INIT ──
+(function() {
+  const data = load();
+  if (!data) {
+    showHome();
+  } else {
+    renderMain(data);
+    showMain();
+  }
+})();
+</script>
+</body>
+</html>
