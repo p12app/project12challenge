@@ -676,8 +676,8 @@ function renderHistory(data) {
     item.innerHTML =
       '<div class="history-dot"></div>' +
       '<div class="history-info">' +
-        '<div class="history-count">' + entry.count + ' item' + (entry.count !== 1 ? 's' : '') + '</div>' +
-        (entry.desc ? '<div class="history-desc">' + entry.desc + '</div>' : '') +
+        '<div class="history-count">Day ' + (entry.day || '—') + ' &nbsp;·&nbsp; ' + entry.count + ' item' + (entry.count !== 1 ? 's' : '') + '</div>' +
+        (entry.desc ? '<div class="history-desc">Notes: ' + entry.desc + '</div>' : '') +
       '</div>' +
       '<div class="history-date">' + formatDate(entry.date) + '</div>' +
       '<button class="history-del" onclick="deleteEntry(\'' + entry.id + '\')">×</button>';
@@ -704,6 +704,7 @@ function logItems() {
   const entry = {
     id: Date.now() + '_' + Math.random().toString(36).slice(2),
     date: todayStr(),
+    day: getDaysIn(data),
     count: count,
     desc: descEl.value.trim()
   };
