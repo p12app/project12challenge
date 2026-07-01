@@ -149,7 +149,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* ── PROGRESS CARDS ── */
   .progress-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -178,10 +177,7 @@
     margin-top: 2px;
   }
 
-  /* ── PROGRESS BAR ── */
-  .progress-bar-wrap {
-    margin-top: 16px;
-  }
+  .progress-bar-wrap { margin-top: 16px; }
 
   .progress-bar-bg {
     height: 6px;
@@ -226,7 +222,6 @@
     margin-bottom: 14px;
   }
 
-  /* ── LOG CARD ── */
   .log-card {
     background: var(--white);
     border-radius: 16px;
@@ -310,8 +305,11 @@
     padding: 13px 18px;
     border-bottom: 1px solid var(--cream);
     gap: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
   }
   .history-item:last-child { border-bottom: none; }
+  .history-item:active { background: var(--cream); }
 
   .history-dot {
     width: 8px;
@@ -350,16 +348,24 @@
     color: var(--light-gray);
     cursor: pointer;
     font-size: 16px;
-    padding: 4px;
+    padding: 4px 8px;
     line-height: 1;
     flex-shrink: 0;
   }
   .history-del:active { color: var(--gray); }
 
-  /* ── RESET ── */
-  .reset-wrap {
-    padding: 0 24px 8px;
+  .tap-hint {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    text-transform: uppercase;
+    text-align: right;
+    margin-bottom: 8px;
+    opacity: 0.6;
   }
+
+  /* ── RESET ── */
+  .reset-wrap { padding: 0 24px 8px; }
 
   .btn-reset {
     width: 100%;
@@ -376,7 +382,6 @@
   }
   .btn-reset:active { background: var(--light-gray); }
 
-  /* ── HOW TO USE ── */
   .how-btn {
     width: calc(100% - 48px);
     margin: 0 24px 16px;
@@ -394,7 +399,7 @@
   }
   .how-btn:active { background: var(--light-gray); }
 
-  /* ── MODAL ── */
+  /* ── MODALS ── */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -452,6 +457,87 @@
     margin-top: 16px;
   }
 
+  /* ── ENTRY DETAIL MODAL ── */
+  .entry-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .entry-stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    color: var(--black);
+    line-height: 1;
+  }
+
+  .entry-stat-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  .entry-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-gray);
+    font-size: 12px;
+  }
+  .entry-detail-row:last-child { border-bottom: none; }
+
+  .entry-detail-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .entry-detail-value {
+    font-size: 13px;
+    color: var(--black);
+    text-align: right;
+    max-width: 60%;
+  }
+
+  .entry-notes-box {
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--black);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+
+  .entry-notes-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+
+  .entry-del-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px 0;
+    background: transparent;
+    border: 1px solid var(--light-gray);
+    border-radius: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .entry-del-btn:active { background: var(--light-gray); }
+
   /* ── COMPLETE BANNER ── */
   .complete-banner {
     background: var(--accent);
@@ -473,11 +559,7 @@
     text-transform: uppercase;
     margin-top: 8px;
   }
-
-  .footer-link a {
-    color: var(--gray);
-    text-decoration: none;
-  }
+  .footer-link a { color: var(--gray); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -496,7 +578,6 @@
 
 <!-- ══ MAIN SCREEN ══ -->
 <div id="main-screen">
-
   <div id="complete-banner" class="complete-banner">Challenge Complete — 465 Items Gone!</div>
 
   <div class="header">
@@ -545,10 +626,10 @@
     </div>
 
     <div class="section-label" style="margin-top:8px;">My Log</div>
+    <div class="tap-hint">Tap any entry to view details</div>
     <div id="history-list">
       <div style="text-align:center;padding:24px;font-size:12px;color:var(--gray);">Nothing logged yet. Start removing!</div>
     </div>
-
   </div>
 
   <div class="reset-wrap">
@@ -560,7 +641,14 @@
   <div class="footer-link">
     <a href="https://project12challenge.com" target="_blank">project12challenge.com</a>
   </div>
+</div>
 
+<!-- ══ ENTRY DETAIL MODAL ══ -->
+<div class="modal-overlay" id="entry-modal" onclick="closeEntryModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="entry-modal-content"></div>
+  </div>
 </div>
 
 <!-- ══ HOW TO USE MODAL ══ -->
@@ -580,6 +668,9 @@
 
       <strong>What doesn't count?</strong><br>
       Everyday trash you would have thrown out anyway. The goal is to clear out things that have been sitting and taking up space.<br><br>
+
+      <strong>View your entries</strong><br>
+      Tap any entry in your log to see the full details -- what you removed, how many items, and your running total up to that point.<br><br>
 
       <strong>Save to your home screen</strong><br>
       iPhone: Open this link in Safari. Tap the Share button at the bottom. Tap Add to Home Screen. Toggle Open as Web App to on. Tap Add.<br><br>
@@ -670,6 +761,14 @@ function renderHistory(data) {
   const card = document.createElement('div');
   card.className = 'history-card';
 
+  // Build running totals map for each entry
+  const runningTotals = {};
+  let running = 0;
+  data.log.forEach(function(entry) {
+    running += entry.count;
+    runningTotals[entry.id] = running;
+  });
+
   reversed.forEach(function(entry) {
     const item = document.createElement('div');
     item.className = 'history-item';
@@ -677,10 +776,16 @@ function renderHistory(data) {
       '<div class="history-dot"></div>' +
       '<div class="history-info">' +
         '<div class="history-count">Day ' + (entry.day || '—') + ' &nbsp;·&nbsp; ' + entry.count + ' item' + (entry.count !== 1 ? 's' : '') + '</div>' +
-        (entry.desc ? '<div class="history-desc">Notes: ' + entry.desc + '</div>' : '') +
+        (entry.desc ? '<div class="history-desc">' + entry.desc + '</div>' : '') +
       '</div>' +
       '<div class="history-date">' + formatDate(entry.date) + '</div>' +
-      '<button class="history-del" onclick="deleteEntry(\'' + entry.id + '\')">×</button>';
+      '<button class="history-del" onclick="event.stopPropagation();deleteEntry(\'' + entry.id + '\')">×</button>';
+
+    // Tap to open detail modal
+    item.addEventListener('click', function() {
+      openEntryModal(entry, runningTotals[entry.id]);
+    });
+
     card.appendChild(item);
   });
 
@@ -718,11 +823,56 @@ function logItems() {
 }
 
 function deleteEntry(id) {
+  if (!confirm('Remove this entry?')) return;
   const data = load();
   if (!data) return;
   data.log = data.log.filter(function(e) { return e.id !== id; });
   save(data);
+  closeEntryModal();
   renderMain(data);
+}
+
+// ── ENTRY DETAIL MODAL ──────────────────────────────
+function openEntryModal(entry, runningTotal) {
+  const content = document.getElementById('entry-modal-content');
+  const pct = Math.min(100, Math.round((runningTotal / GOAL) * 100));
+
+  content.innerHTML =
+    '<div class="entry-stat">' +
+      '<div class="entry-stat-num">' + entry.count + '</div>' +
+      '<div class="entry-stat-label">item' + (entry.count !== 1 ? 's' : '') + '<br>removed</div>' +
+    '</div>' +
+
+    '<div class="entry-detail-row">' +
+      '<span class="entry-detail-label">Day</span>' +
+      '<span class="entry-detail-value">' + (entry.day || '—') + '</span>' +
+    '</div>' +
+    '<div class="entry-detail-row">' +
+      '<span class="entry-detail-label">Date</span>' +
+      '<span class="entry-detail-value">' + formatDate(entry.date) + '</span>' +
+    '</div>' +
+    '<div class="entry-detail-row">' +
+      '<span class="entry-detail-label">Running Total</span>' +
+      '<span class="entry-detail-value">' + runningTotal + ' of ' + GOAL + ' items (' + pct + '%)</span>' +
+    '</div>' +
+
+    (entry.desc ?
+      '<div class="entry-notes-box">' +
+        '<div class="entry-notes-label">Notes</div>' +
+        entry.desc +
+      '</div>'
+    : '') +
+
+    '<button class="modal-close" onclick="closeEntryModal()">Close</button>' +
+    '<button class="entry-del-btn" onclick="deleteEntry(\'' + entry.id + '\')">Delete This Entry</button>';
+
+  document.getElementById('entry-modal').classList.add('open');
+}
+
+function closeEntryModal(e) {
+  if (!e || e.target === document.getElementById('entry-modal')) {
+    document.getElementById('entry-modal').classList.remove('open');
+  }
 }
 
 function resetChallenge() {
