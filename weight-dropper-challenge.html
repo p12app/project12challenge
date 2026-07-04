@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20•20•12 The Weight Dropper Challenge</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --olive: #3a4a2e;
+    --olive-light: #4d6340;
+    --olive-mid: #2d3a23;
+    --cream: #e8e0d0;
+    --cream-dark: #d6cbb8;
+    --cream-light: #f4f0e8;
+    --gold: #8a7a5a;
+    --charcoal: #2d2d2a;
+  }
+
+  body {
+    background: var(--cream-light);
+    font-family: 'Jost', sans-serif;
+    color: var(--charcoal);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .card {
+    background: var(--cream);
+    max-width: 480px;
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(58,74,46,0.15);
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--olive);
+    padding: 40px 32px 32px;
+    text-align: center;
+  }
+
+  .headline-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .headline-number span {
+    color: var(--cream-dark);
+    opacity: 0.7;
+  }
+
+  .brand-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    color: var(--cream-dark);
+    opacity: 0.7;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  .tagline {
+    margin-top: 20px;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.6;
+  }
+
+  .tagline strong {
+    font-weight: 600;
+    color: var(--cream-light);
+  }
+
+  .sub-tagline {
+    font-size: 12px;
+    color: var(--cream-dark);
+    opacity: 0.8;
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  /* WEEKS 1 & 2 BOX */
+  .profit-section {
+    background: var(--olive-mid);
+    margin: 0;
+    padding: 28px 32px;
+  }
+
+  .profit-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    opacity: 0.7;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .profit-label::before {
+    content: '★';
+    color: var(--cream-dark);
+    font-size: 10px;
+  }
+
+  .weeks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .week-col h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+
+  .week-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .week-row-label {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--cream-dark);
+    opacity: 0.85;
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .week-row-amount {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cream);
+    white-space: nowrap;
+  }
+
+  .week-total {
+    border-top: 1px solid rgba(232,224,208,0.2);
+    padding-top: 10px;
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .week-total-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    opacity: 0.7;
+  }
+
+  .week-total-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream-light);
+  }
+
+  /* PACK INVESTMENT */
+  .pack-box {
+    background: rgba(232,224,208,0.08);
+    border: 1px solid rgba(232,224,208,0.15);
+    border-radius: 3px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pack-left {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    opacity: 0.6;
+    line-height: 1.8;
+  }
+
+  .pack-right {
+    text-align: right;
+  }
+
+  .pack-spent {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--cream-dark);
+    opacity: 0.6;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .pack-profit {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cream-light);
+  }
+
+  .pack-profit-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--cream-dark);
+    opacity: 0.6;
+    text-transform: uppercase;
+  }
+
+  /* TABLE */
+  .table-section {
+    padding: 0;
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 72px 1fr 80px 90px;
+    padding: 12px 24px;
+    background: var(--olive);
+  }
+
+  .table-header span {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    opacity: 0.7;
+    font-weight: 500;
+  }
+
+  .table-header span:last-child,
+  .table-header span:nth-child(3) {
+    text-align: right;
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 72px 1fr 80px 90px;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(58,74,46,0.12);
+    align-items: center;
+    transition: background 0.15s;
+  }
+
+  .table-row:hover {
+    background: rgba(58,74,46,0.04);
+  }
+
+  .table-row.highlight {
+    background: var(--olive);
+  }
+
+  .table-row.highlight .week-num,
+  .table-row.highlight .droppers,
+  .table-row.highlight .running {
+    color: var(--cream);
+  }
+
+  .week-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--olive);
+  }
+
+  .droppers {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--charcoal);
+  }
+
+  .badge {
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--olive-light);
+    color: var(--cream);
+    padding: 2px 6px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-top: 3px;
+  }
+
+  .highlight .badge {
+    background: rgba(232,224,208,0.2);
+  }
+
+  .cycles-earned {
+    text-align: right;
+  }
+
+  .cycles-amount {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--olive);
+  }
+
+  .highlight .cycles-amount {
+    color: var(--cream-light);
+  }
+
+  .cycles-label {
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+
+  .highlight .cycles-label {
+    color: var(--cream-dark);
+    opacity: 0.7;
+  }
+
+  .running {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal);
+    text-align: right;
+  }
+
+  /* TOTALS */
+  .totals {
+    background: var(--olive);
+    padding: 28px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .total-item {}
+
+  .total-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--cream-light);
+    line-height: 1;
+  }
+
+  .total-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    opacity: 0.65;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--cream-dark);
+    padding: 24px 32px;
+    text-align: center;
+  }
+
+  .footer-rule {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--olive);
+    line-height: 1.6;
+  }
+
+  .footer-rule strong {
+    color: var(--olive);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .footer-brand {
+    margin-top: 16px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--olive-light);
+    opacity: 0.3;
+    margin: 12px auto;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="headline-number">20<span>•</span>20<span>•</span>12</div>
+    <div class="brand-label">The Weight Dropper Challenge</div>
+    <div class="tagline">
+      Drop <strong>20 lbs</strong> · Earn <strong>$20,000</strong> · <strong>12 Weeks</strong>
+    </div>
+    <div class="sub-tagline">Two Weight Droppers at a time</div>
+  </div>
+
+  <!-- WEEKS 1 & 2 -->
+  <div class="profit-section">
+    <div class="profit-label">Weeks 1 & 2 — You're Already Profitable</div>
+
+    <div class="weeks-grid">
+      <div class="week-col">
+        <h3>Week 1</h3>
+        <div class="week-row">
+          <span class="week-row-label">20% PIB (2 enrollments)</span>
+          <span class="week-row-amount">$66.80</span>
+        </div>
+        <div class="week-row">
+          <span class="week-row-label">Consultant Rank Bonus</span>
+          <span class="week-row-amount">$50.00</span>
+        </div>
+        <div class="week-total">
+          <span class="week-total-label">Week 1</span>
+          <span class="week-total-amount">$116.80</span>
+        </div>
+      </div>
+
+      <div class="week-col">
+        <h3>Week 2</h3>
+        <div class="week-row">
+          <span class="week-row-label">Consultant Dev Bonus ×2</span>
+          <span class="week-row-amount">$200.00</span>
+        </div>
+        <div class="week-row">
+          <span class="week-row-label">Manager Rank Bonus</span>
+          <span class="week-row-amount">$250.00</span>
+        </div>
+        <div class="week-total">
+          <span class="week-total-label">Week 2</span>
+          <span class="week-total-amount">$450.00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pack-box">
+      <div class="pack-left">
+        Pack Investment<br>
+        Healthy Lifestyle Pack
+      </div>
+      <div class="pack-right">
+        <div class="pack-spent">Spent ~$200 · Earned after 2 weeks</div>
+        <div class="pack-profit">+$366.80</div>
+        <div class="pack-profit-label">Profit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-section">
+    <div class="table-header">
+      <span>Week</span>
+      <span>Weight Droppers</span>
+      <span style="text-align:right">Earned</span>
+      <span style="text-align:right">Running</span>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 1</div>
+      <div class="droppers">2 Weight Droppers<br><span class="badge">Consultant</span></div>
+      <div class="cycles-earned"><div class="cycles-amount">$116.80</div><div class="cycles-label">PIB + RAB</div></div>
+      <div class="running">$116.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 2</div>
+      <div class="droppers">4 Weight Droppers<br><span class="badge">Manager</span></div>
+      <div class="cycles-earned"><div class="cycles-amount">$450.00</div><div class="cycles-label">Dev + RAB</div></div>
+      <div class="running">$566.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 3</div>
+      <div class="droppers">8 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$54</div><div class="cycles-label">1 cycle</div></div>
+      <div class="running">$620.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 4</div>
+      <div class="droppers">16 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$54</div><div class="cycles-label">1 cycle</div></div>
+      <div class="running">$674.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 5</div>
+      <div class="droppers">32 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$162</div><div class="cycles-label">3 cycles</div></div>
+      <div class="running">$836.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 6</div>
+      <div class="droppers">64 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$378</div><div class="cycles-label">7 cycles</div></div>
+      <div class="running">$1,214.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 7</div>
+      <div class="droppers">128 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$756</div><div class="cycles-label">14 cycles</div></div>
+      <div class="running">$1,970.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 8</div>
+      <div class="droppers">256 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$1,512</div><div class="cycles-label">28 cycles</div></div>
+      <div class="running">$3,482.80</div>
+    </div>
+
+    <div class="table-row">
+      <div class="week-num">WK 9</div>
+      <div class="droppers">512 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$3,024</div><div class="cycles-label">56 cycles</div></div>
+      <div class="running">$6,506.80</div>
+    </div>
+
+    <div class="table-row highlight">
+      <div class="week-num">WK 10</div>
+      <div class="droppers">1,024 Weight Droppers<br><span class="badge">100 Cycle Cap</span></div>
+      <div class="cycles-earned"><div class="cycles-amount">$5,400</div><div class="cycles-label">100 cycles</div></div>
+      <div class="running">$11,906.80</div>
+    </div>
+
+    <div class="table-row highlight">
+      <div class="week-num">WK 11</div>
+      <div class="droppers">2,048 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$5,400</div><div class="cycles-label">100 cycles</div></div>
+      <div class="running">$17,306.80</div>
+    </div>
+
+    <div class="table-row highlight">
+      <div class="week-num">WK 12</div>
+      <div class="droppers">4,096 Weight Droppers</div>
+      <div class="cycles-earned"><div class="cycles-amount">$5,400</div><div class="cycles-label">100 cycles</div></div>
+      <div class="running">$22,706.80</div>
+    </div>
+  </div>
+
+  <!-- TOTALS -->
+  <div class="totals">
+    <div class="total-item">
+      <div class="total-number">8,190</div>
+      <div class="total-label">Total Weight<br>Droppers</div>
+    </div>
+    <div class="total-item">
+      <div class="total-number">370</div>
+      <div class="total-label">Total<br>Cycles</div>
+    </div>
+    <div class="total-item">
+      <div class="total-number">$22,706</div>
+      <div class="total-label">Total<br>Earned</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-rule">
+      One rule. Find <strong>two Weight Droppers.</strong><br>
+      Teach them to do the same.
+    </div>
+    <div class="divider"></div>
+    <div class="footer-brand">Aster Business Club</div>
+  </div>
+
+</div>
+</body>
+</html>
